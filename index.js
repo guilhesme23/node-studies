@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import fs from "fs"
 import multer from 'multer'
+import uuid from 'uuid'
 
 const app = express()
 
@@ -46,13 +47,23 @@ const app = express()
 
 // Upload test
 let upPath = path.join(__dirname, 'uploads')
-const upload = multer({ dest: upPath })
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, upPath)
+    },
+    filename: function (req, file, cb) {
+        cb(null, uuid.v1())
+    }
+})
+
+const upload = multer({ dest: upPath, storage })
 
 app.use(express.static('public'))
 
 app.post('/file/upload', upload.single('file'), (req, res) => {
     let formdata = req.file
-    console.log(formdata)
+    let realName = req.file.filename + '.' + req.file.mimetype.split('/').pop()
+    console.log(req.file.filename)
     res.send('<h2>OK</h2>')
 })
 
