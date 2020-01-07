@@ -2,24 +2,29 @@ import express from 'express'
 import path from 'path'
 import fs from "fs"
 import multer from 'multer'
-import uuid from 'uuid'
+import alphanumeric from 'alphanumeric-id'
 
 const app = express()
 
 // Upload test
-let uploadPath = path.join(__dirname, 'uploads')
+let uploadPath = path.resolve(__dirname, '..', 'uploads')
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadPath)
     },
     filename: function (req, file, cb) {
-        cb(null, uuid.v1())
+        const fileExtension = file.mimetype.split('/').pop()
+        const filename = path.format({
+            name: alphanumeric(8),
+            ext: `.${fileExtension}`
+        })
+        cb(null, filename)
     }
 })
 
-app.use(express.static('public'))
+app.use(express.static(path.resolve(__dirname, '..', 'public')))
 
-const upload = multer({ dest: upPath, storage })
+const upload = multer({ dest: uploadPath, storage })
 
 app.post('/file/upload', upload.single('file'), (req, res) => {
     console.log(req.file.filename)
@@ -28,7 +33,7 @@ app.post('/file/upload', upload.single('file'), (req, res) => {
 
 app.get('/movies/:movieName', (req, res) => {
     const { movieName } = req.params; // Nome do arquivo
-    const movieFile = `${__dirname}/assets/${movieName}`; // Caminho para o arquivo
+    const movieFile = `${__dirname}/../uploads/${movieName}`; // Caminho para o arquivo
 
     // fs.stat pega dados do arquivo de forma assíncrona
     fs.stat(movieFile, (err, stats) => {
