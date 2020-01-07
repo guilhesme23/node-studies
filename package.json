@@ -1,0 +1,17 @@
+{
+  "name": "video-api",
+  "version": "0.1.0",
+  "description": "Studying node",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node index.js"
+  },
+  "author": "Guilherme",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/node": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "express": "^4.17.1"
+  }
+}
