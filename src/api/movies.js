@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import multer from 'multer'
 import alphanumeric from 'alphanumeric-id'
+import db from '../config/db'
 
 const movies = Router() // /movies
 
@@ -67,6 +68,12 @@ movies.post('/upload', upload.single('file'), (req, res) => {
         movieId: path.parse(req.file.filename).name
     }
     res.json(data)
+})
+
+movies.get('/', (req, res) => {
+    res.json({
+        hello: "all"
+    })
 })
 
 export default movies
