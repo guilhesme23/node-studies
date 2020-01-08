@@ -1,6 +1,7 @@
 import express from 'express'
 import path from 'path'
 import movies from './api/movies'
+import db from './config/db'
 
 const app = express()
 
