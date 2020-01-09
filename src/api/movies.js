@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import multer from 'multer'
 import alphanumeric from 'alphanumeric-id'
-import db from '../config/db'
+import Movie from '../models/movie'
 
 const movies = Router() // /movies
 
@@ -70,10 +70,9 @@ movies.post('/upload', upload.single('file'), (req, res) => {
     res.json(data)
 })
 
-movies.get('/', (req, res) => {
-    res.json({
-        hello: "all"
-    })
+movies.get('/', async (req, res) => {
+    let allMovies = await Movie.find().exec() 
+    res.json(allMovies)
 })
 
 export default movies
