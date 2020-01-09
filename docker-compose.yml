@@ -8,3 +8,15 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
+  
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3005:3000
+    environment:
+      DB_HOST: mongo
+      DB_NAME: admin
+    depends_on:
+      - mongo
