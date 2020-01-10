@@ -1,18 +1,12 @@
 import mongoose from 'mongoose'
-
-let dbUser = process.env.DB_USER || "root"
-let dbPass = process.env.DB_PASS || "123456"
-
-let dbHost = process.env.DB_HOST || "localhost"
-let dbPort = process.env.DB_PORT || "27017"
-let dbName = process.env.DB_NAME || "movies"
+import config from './index'
 
 let connString = ""
 
-if (dbUser) {
-    connString = `mongodb://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}`
+if (config.db.user && config.db.pass) {
+    connString = `mongodb://${config.db.user}:${config.db.pass}@${config.db.host}:${config.db.port}/${config.db.name}`
 } else {
-    connString = `mongodb://${dbHost}:${dbPort}/${dbName}`
+    connString = `mongodb://${config.db.host}:${config.db.port}/${config.db.name}`
 }
 
 mongoose.connect(connString, { 
