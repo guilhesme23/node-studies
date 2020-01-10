@@ -59,15 +59,31 @@ let storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ dest: uploadPath, storage })
+const upload = multer({ dest: uploadPath, storage }).single('file')
 
-movies.post('/upload', upload.single('file'), (req, res) => {
-    console.log(req.file.filename)
-    let data = {
-        uploadStatus: 'success',
-        movieId: path.parse(req.file.filename).name
-    }
-    res.json(data)
+movies.post('/upload', (req, res) => {
+    upload(req, res, (err) => {
+        if (err) {
+            res.status(400)
+            res.json({
+                message: err
+            })
+            return
+        }
+        if (!req.file) {
+            res.status(400)
+            res.json({
+                message: 'No file detected'
+            })
+            return
+        }
+        console.log(req.file.filename)
+        let data = {
+            movieId: path.parse(req.file.filename).name
+        }
+        res.status(201)
+        res.json(data)
+    })
 })
 
 movies.get('/', async (req, res) => {
