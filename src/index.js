@@ -2,8 +2,12 @@ import express from 'express'
 import path from 'path'
 import movies from './api/movies'
 import db from './config/db'
+import winston , { format, transports } from 'winston'
+import morgan from 'morgan'
 
 const app = express()
+
+app.use(morgan('short'))
 
 app.use(express.static(path.resolve(__dirname, '..', 'public')))
 
