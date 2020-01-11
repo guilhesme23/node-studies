@@ -4,6 +4,7 @@ import path from 'path'
 import multer from 'multer'
 import alphanumeric from 'alphanumeric-id'
 import Movie from '../models/movie'
+import MovieService from '../services/movieService'
 
 const movies = Router() // /movies
 
@@ -61,8 +62,8 @@ let storage = multer.diskStorage({
 
 const upload = multer({ dest: uploadPath, storage }).single('file')
 
-movies.post('/upload', (req, res) => {
-    upload(req, res, (err) => {
+movies.post('/upload', async (req, res) => {
+    upload(req, res, async (err) => {
         if (err) {
             res.status(400)
             res.json({
@@ -77,13 +78,13 @@ movies.post('/upload', (req, res) => {
             })
             return
         }
-        console.log(req.file)
-        console.log(req.body)
-        let data = {
-            movieId: path.parse(req.file.filename).name
-        }
+        let createdMovie = await MovieService.saveMovieMeta({
+            file: req.file,
+            fields: req.body
+        })
+        console.log(createdMovie)
         res.status(201)
-        res.json(data)
+        res.json(createdMovie)
     })
 })
 
