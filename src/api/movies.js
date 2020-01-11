@@ -77,7 +77,8 @@ movies.post('/upload', (req, res) => {
             })
             return
         }
-        console.log(req.file.filename)
+        console.log(req.file)
+        console.log(req.body)
         let data = {
             movieId: path.parse(req.file.filename).name
         }
