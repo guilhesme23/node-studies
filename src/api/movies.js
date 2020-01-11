@@ -64,6 +64,7 @@ const upload = multer({ dest: uploadPath, storage }).single('file')
 
 movies.post('/upload', async (req, res) => {
     upload(req, res, async (err) => {
+        // Check for upload errors
         if (err) {
             res.status(400)
             res.json({
@@ -78,12 +79,17 @@ movies.post('/upload', async (req, res) => {
             })
             return
         }
+
         let createdMovie = await MovieService.saveMovieMeta({
             file: req.file,
             fields: req.body
         })
-        console.log(createdMovie)
-        res.status(201)
+        // Check for database validation errors
+        if (createdMovie.errors) {
+            res.status(400)
+        } else {
+            res.status(201)
+        }
         res.json(createdMovie)
     })
 })

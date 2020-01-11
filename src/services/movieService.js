@@ -23,17 +23,15 @@ export default class MovieService {
             ext,
             fileDir: data.file.path,
             sizeBytes: data.file.size,
+            ...data.fields
         }
 
-        if(data.fields) {
-            movie = {
-                ...movie,
-                ...data.fields
-            } 
+        let movieDocument = new Movie(movie)
+        try {
+            movie = await movieDocument.save();
+        } catch(err) {
+            return err
         }
-
-        let document = new Movie(movie)
-        movie = await document.save()
 
         return movie
     }
