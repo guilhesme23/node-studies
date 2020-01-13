@@ -21,7 +21,7 @@ export default class MovieService {
         let movie = {
             movieId,
             ext,
-            fileDir: data.file.path,
+            fileDir: data.file.destination,
             sizeBytes: data.file.size,
             ...data.fields
         }
